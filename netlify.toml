@@ -1,0 +1,38 @@
+– # Netlify configuration for Inner Territories (TanStack Start SSR)
+# Option 1: SSR via Netlify Functions
+#
+# TanStack Start uses Nitro under the hood. To deploy to Netlify with SSR,
+# set the Nitro preset to `netlify` via environment variable at build time.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  # Tell Nitro to emit a Netlify Functions-compatible SSR bundle
+  NITRO_PRESET = "netlify"
+
+# SSR catch-all: route every request to the Netlify Function that runs the
+# TanStack Start server entry. Static assets in `publish` are served first;
+# anything not matched falls through to the SSR function.
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server"
+  status = 200
+  force = false
+
+# Long-cache hashed build assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
