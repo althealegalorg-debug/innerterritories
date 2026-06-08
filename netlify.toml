@@ -1,4 +1,4 @@
-– # Netlify configuration for Inner Territories (TanStack Start SSR)
+# Netlify configuration for Inner Territories (TanStack Start SSR)
 # Option 1: SSR via Netlify Functions
 #
 # TanStack Start uses Nitro under the hood. To deploy to Netlify with SSR,
