@@ -3,13 +3,21 @@
 //   - tanstackStart, viteReact, tailwindcss, tsConfigPaths, nitro (build-only using cloudflare as a default target),
 //     componentTagger (dev-only), VITE_* env injection, @ path alias, React/TanStack dedupe,
 //     error logger plugins, and sandbox detection (port/host/strictPort).
-// You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+// Static-site build targeting GitHub Pages.
+// Nitro's `github_pages` preset prerenders all routes, emits a SPA-friendly
+// 404.html fallback, and writes a `.nojekyll` file so hashed asset folders
+// (e.g. `_assets/`) are served correctly by Pages.
 export default defineConfig({
   tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
     server: { entry: "server" },
+  },
+  nitro: {
+    preset: "github_pages",
+    output: {
+      dir: ".output",
+      publicDir: ".output/public",
+    },
   },
 });
